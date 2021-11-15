@@ -1,7 +1,7 @@
 import { Box, CircularProgress, Typography, Paper, Button } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
 import { StyledHeader } from "../../components/Header";
-import { useResidentsContext } from "../../contexts/ResidentContext";
+import { useResidentsContext } from "../../contexts/ResidentsContext";
 import { ResidentTable } from "./ResidentTable";
 
 const Residents = () => {

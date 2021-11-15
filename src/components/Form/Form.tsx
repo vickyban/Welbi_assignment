@@ -14,11 +14,11 @@ const mapFieldTypeToComponent = (field: UnionFieldBuilderType) => {
       const { fieldType, ...fieldProps } = field;
       return <TextField {...fieldProps} />;
     }
-    case FieldType.MULTIPLE_SELECT: {
+    case FieldType.CHECKBOXES: {
       const { fieldType, ...fieldProps } = field;
       return <Checkboxes {...fieldProps} />;
     }
-    case FieldType.RADIO_SELECT: {
+    case FieldType.RADIOS: {
       const { fieldType, ...fieldProps } = field;
       return <Radios {...fieldProps} />;
     }

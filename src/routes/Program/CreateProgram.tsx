@@ -3,9 +3,9 @@ import Form, { ExtraFormActionType } from "../../components/Form/Form";
 import { useApi } from "../../config/apiClient";
 import { useNavigate } from "react-router-dom";
 import { useResidentsContext } from "../../contexts/ResidentsContext";
-import { formSchema, ResidentFormInput, validateForm } from "./utils";
+import { formSchema, ProgramFormInput, validateForm } from "./utils";
 
-export const CreateResident = () => {
+export const CreateProgram = () => {
   const navigate = useNavigate();
   const { refetch } = useResidentsContext();
   const { call } = useApi();
@@ -14,20 +14,20 @@ export const CreateResident = () => {
     {
       label: "Close",
       onClick: () => {
-        navigate("/residents", { replace: true });
+        navigate("/programs", { replace: true });
       },
       variant: "outlined",
     },
   ];
 
-  const onSubmit = async (values: ResidentFormInput) => {
+  const onSubmit = async (values: ProgramFormInput) => {
     const { data } = await call({
       method: "post",
-      url: "/residents",
-      data: ResidentFormInput.toSubmitForm(values),
+      url: "/programs",
+      data: ProgramFormInput.toSubmitForm(values),
     });
     await refetch();
-    navigate(`/residents/${data.id}`);
+    navigate(`/programs/${data.id}`);
   };
 
   return (
@@ -40,8 +40,8 @@ export const CreateResident = () => {
         boxSizing: "content-box",
       }}
     >
-      <Form<ResidentFormInput>
-        initialValues={ResidentFormInput.empty()}
+      <Form<ProgramFormInput>
+        initialValues={ProgramFormInput.empty()}
         formSchema={formSchema}
         validate={validateForm}
         onSubmit={onSubmit}

@@ -1,18 +1,17 @@
 import { createContext, useContext, useEffect } from "react";
 import { useApi } from "../config/apiClient";
-import { mockResidents } from "../config/mockResidents";
 import { IResident } from "../entities.interface";
 
 type ContextType = {
   residents: IResident[];
   residentDic?: Record<string, IResident>;
   loading: boolean;
-  refetch: () => void;
+  refetch: () => Promise<any>;
 };
 export const ResidentsContext = createContext<ContextType>({
   residents: [],
   loading: false,
-  refetch: () => {},
+  refetch: () => Promise.resolve(null),
 });
 
 export const ResidentsProvider: React.FC = ({ children }) => {
@@ -22,14 +21,14 @@ export const ResidentsProvider: React.FC = ({ children }) => {
     loading,
     normalizedData: residentDic,
     refetch,
-  } = useApi<IResident[], IResident>({ initialData: mockResidents, shouldNormalizeResult: true });
+  } = useApi<IResident[], IResident>({ initialData: [], shouldNormalizeResult: true });
 
-  // useEffect(() => {
-  //   call({
-  //     method: "get",
-  //     url: "/residents",
-  //   });
-  // }, [call]);
+  useEffect(() => {
+    call({
+      method: "get",
+      url: "/residents",
+    });
+  }, [call]);
 
   return (
     <ResidentsContext.Provider

@@ -2,23 +2,22 @@ import { Paper } from "@mui/material";
 import Form, { ExtraFormActionType } from "../../components/Form/Form";
 import { AttendanceTable } from "./AttendanceTable";
 import { useNavigate, useParams } from "react-router-dom";
-import { useResidentsContext } from "../../contexts/ResidentsContext";
-import { formSchema, ResidentFormInput, validateForm } from "./utils";
+import { formSchema, ProgramFormInput, validateForm } from "./utils";
+import { useProgramsContext } from "../../contexts/ProgramsContext";
 
-type Props = {};
-export const Resident = (props: Props) => {
+export const Program = () => {
   const navigate = useNavigate();
-  const { residentId } = useParams();
-  const { residentDic } = useResidentsContext();
-  const resident = residentDic && residentId && residentDic[residentId];
+  const { programId } = useParams();
+  const { programDic } = useProgramsContext();
+  const program = programDic && programId && programDic[programId];
 
-  if (!resident) return null;
+  if (!program) return null;
 
   const extraFormActions: ExtraFormActionType[] = [
     {
       label: "Close",
       onClick: () => {
-        navigate("/residents", { replace: true });
+        navigate("/programs", { replace: true });
       },
       variant: "outlined",
     },
@@ -34,13 +33,13 @@ export const Resident = (props: Props) => {
       }}
     >
       <Form
-        initialValues={ResidentFormInput.fromResidentType(resident)}
+        initialValues={ProgramFormInput.fromProgramType(program)}
         formSchema={formSchema}
         validate={validateForm}
         extraActions={extraFormActions}
       />
 
-      <AttendanceTable data={resident.attendance} />
+      <AttendanceTable data={program.attendance} />
     </Paper>
   );
 };

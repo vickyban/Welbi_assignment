@@ -1,7 +1,7 @@
-import React from "react";
 import { IProgram } from "../../entities.interface";
 
 import { ColumnType, Table } from "../../components/Table";
+import { useNavigate } from "react-router-dom";
 
 const getArrayItem = (item: any, key?: string) => {
   if (item instanceof Object && key) {
@@ -53,9 +53,15 @@ type Props = {
   data: IProgram[];
 };
 export const ProgramTable = ({ data }: Props) => {
+  const navigate = useNavigate();
+
+  const onRowClick = (program: IProgram) => {
+    navigate(`/programs/${program.id}`);
+  };
+
   return (
     <div style={{ height: 520, width: "100%" }}>
-      <Table<IProgram> data={data} columns={columns} />
+      <Table<IProgram> data={data} columns={columns} onRowClick={onRowClick} />
     </div>
   );
 };

@@ -50,7 +50,7 @@ type ApiCallAction =
   | {
       type: ApiCallActionType.FETCH;
       payload: {
-        requestConfig: AxiosRequestConfig;
+        requestConfig?: AxiosRequestConfig;
         activePromise?: Promise<any>;
       };
     }
@@ -77,15 +77,10 @@ const apiCallReducer = (state: ApiCallState, action: ApiCallAction): ApiCallStat
       return {
         ...state,
         activePromise: action.payload.activePromise,
-        requestConfig: action.payload.requestConfig,
+        requestConfig: action.payload.requestConfig || state.requestConfig,
         status: ApiCallStatus.FETCHING,
       };
     }
-    case ApiCallActionType.REFETCH:
-      return {
-        ...state,
-        status: ApiCallStatus.FETCHING,
-      };
     case ApiCallActionType.RESOLVE: {
       return {
         ...state,
@@ -119,7 +114,7 @@ interface UseApiHookResult<DataType, NormalizedDataType> {
   data: DataType;
   normalizedData?: Record<string, NormalizedDataType>;
   loading: boolean;
-  refetch: () => void;
+  refetch: () => Promise<any>;
   error?: string;
   call: (requestConfig: AxiosRequestConfig) => Promise<any>;
 }
@@ -140,12 +135,8 @@ export const useApi = <DataType = any, NormalizedDataType = undefined>(
   const { data, status, error, requestConfig, normalizedData, activePromise } = state;
 
   useEffect(() => {
-    let promise = activePromise;
-    if (requestConfig && status === ApiCallStatus.FETCHING && !promise) {
-      promise = apiClient.request(requestConfig);
-    }
-    if (promise) {
-      promise
+    if (status === ApiCallStatus.FETCHING && activePromise) {
+      activePromise
         .then(({ data }) => {
           dispatch({
             type: ApiCallActionType.RESOLVE,
@@ -159,7 +150,7 @@ export const useApi = <DataType = any, NormalizedDataType = undefined>(
           });
         });
     }
-  }, [status, requestConfig, activePromise, dispatch]);
+  }, [status, activePromise, dispatch]);
 
   const call = useCallback(
     (requestConfig: AxiosRequestConfig) => {
@@ -170,7 +161,12 @@ export const useApi = <DataType = any, NormalizedDataType = undefined>(
     [dispatch],
   );
 
-  const refetch = useCallback(() => dispatch({ type: ApiCallActionType.REFETCH }), [dispatch]);
+  const refetch = useCallback(() => {
+    if (!requestConfig) return Promise.resolve(null);
+    const promise = apiClient.request(requestConfig);
+    dispatch({ type: ApiCallActionType.FETCH, payload: { activePromise: promise } });
+    return promise;
+  }, [dispatch, requestConfig]);
 
   return {
     data,

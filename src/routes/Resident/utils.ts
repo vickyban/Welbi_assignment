@@ -108,7 +108,6 @@ export class ResidentFormInput
   }
 
   static toSubmitForm(formInput: ResidentFormInput) {
-    const date = new Date();
     return {
       ...formInput,
       name: [formInput.firstName, formInput.lastName].join(" ").trim(),

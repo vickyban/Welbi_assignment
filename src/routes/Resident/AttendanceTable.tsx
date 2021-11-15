@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { ColumnType, Table } from "../../components/Table";
 import { IResidentProgramAttendance } from "../../entities.interface";
 
@@ -17,11 +17,15 @@ type Props = {
 };
 export const AttendanceTable = ({ data }: Props) => {
   return (
-    <div>
+    <Box
+      sx={{
+        padding: 2,
+      }}
+    >
       <Typography variant="subtitle1" fontWeight="bold">
         Program Attendance List
       </Typography>
       <Table<IResidentProgramAttendance> data={data} columns={columns} keyExtractor={(data) => data.programId} />
-    </div>
+    </Box>
   );
 };

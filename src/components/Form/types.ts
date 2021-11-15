@@ -2,11 +2,12 @@ import { CheckboxData, RadioData, SelectData } from "mui-rff";
 
 export enum FieldType {
   TEXT = "TEXT",
-  MULTIPLE_SELECT = "MULTIPLE_SELECT",
-  RADIO_SELECT = "RADIO_SELECT",
+  CHECKBOXES = "CHECKBOXES",
+  RADIOS = "RADIOS",
   DATE = "DATE",
   DATETIME = "DATETIME",
   SELECT = "SELECT",
+  SWITCH = "SWITCH",
 }
 
 export interface FieldBuilderType {
@@ -23,13 +24,13 @@ export interface TextFieldBuilderType extends FieldBuilderType {
   type: "text" | "number" | "email" | "password";
 }
 
-export interface MultipleSelectFieldBuilderType extends FieldBuilderType {
-  readonly fieldType: FieldType.MULTIPLE_SELECT;
-  data: CheckboxData[];
+export interface CheckboxesFieldBuilderType extends FieldBuilderType {
+  readonly fieldType: FieldType.CHECKBOXES;
+  data: CheckboxData | CheckboxData[];
 }
 
-export interface RadioSelectFieldBuilderType extends FieldBuilderType {
-  readonly fieldType: FieldType.RADIO_SELECT;
+export interface RadiosFieldBuilderType extends FieldBuilderType {
+  readonly fieldType: FieldType.RADIOS;
   data: RadioData[];
 }
 
@@ -39,13 +40,14 @@ export interface DateFieldBuilderType extends FieldBuilderType {
 export interface SelectFieldBuilderType extends FieldBuilderType {
   readonly fieldType: FieldType.SELECT;
   data: SelectData[];
+  multiple?: boolean;
 }
 
 export type UnionFieldBuilderType =
   | TextFieldBuilderType
   | DateFieldBuilderType
-  | MultipleSelectFieldBuilderType
-  | RadioSelectFieldBuilderType
+  | CheckboxesFieldBuilderType
+  | RadiosFieldBuilderType
   | SelectFieldBuilderType;
 
 export interface FormBuilderType {
