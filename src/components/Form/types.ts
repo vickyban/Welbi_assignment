@@ -1,4 +1,5 @@
-import { CheckboxData, RadioData, SelectData } from "mui-rff";
+import { AutocompleteData, CheckboxData, RadioData, SelectData } from "mui-rff";
+import { FieldProps } from "react-final-form";
 
 export enum FieldType {
   TEXT = "TEXT",
@@ -8,6 +9,7 @@ export enum FieldType {
   DATETIME = "DATETIME",
   SELECT = "SELECT",
   SWITCH = "SWITCH",
+  AUTOCOMPLETE = "AUTOCOMPLETE",
 }
 
 export interface FieldBuilderType {
@@ -17,11 +19,14 @@ export interface FieldBuilderType {
   required?: boolean;
   fieldType: FieldType;
   index?: number;
+  fieldProps?: Partial<FieldProps<any, any>>;
 }
 
 export interface TextFieldBuilderType extends FieldBuilderType {
   readonly fieldType: FieldType.TEXT;
   type: "text" | "number" | "email" | "password";
+  min?: string | number;
+  max?: number;
 }
 
 export interface CheckboxesFieldBuilderType extends FieldBuilderType {
@@ -43,12 +48,18 @@ export interface SelectFieldBuilderType extends FieldBuilderType {
   multiple?: boolean;
 }
 
+export interface AutocompleteFieldBuilderType extends FieldBuilderType {
+  readonly fieldType: FieldType.AUTOCOMPLETE;
+  data: AutocompleteData[];
+}
+
 export type UnionFieldBuilderType =
   | TextFieldBuilderType
   | DateFieldBuilderType
   | CheckboxesFieldBuilderType
   | RadiosFieldBuilderType
-  | SelectFieldBuilderType;
+  | SelectFieldBuilderType
+  | AutocompleteFieldBuilderType;
 
 export interface FormBuilderType {
   id?: string;

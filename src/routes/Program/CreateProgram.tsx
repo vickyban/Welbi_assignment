@@ -2,12 +2,12 @@ import { Paper } from "@mui/material";
 import Form, { ExtraFormActionType } from "../../components/Form/Form";
 import { useApi } from "../../config/apiClient";
 import { useNavigate } from "react-router-dom";
-import { useResidentsContext } from "../../contexts/ResidentsContext";
 import { formSchema, ProgramFormInput, validateForm } from "./utils";
+import { useProgramsContext } from "../../contexts/ProgramsContext";
 
 export const CreateProgram = () => {
   const navigate = useNavigate();
-  const { refetch } = useResidentsContext();
+  const { refetch } = useProgramsContext();
   const { call } = useApi();
 
   const extraFormActions: ExtraFormActionType[] = [

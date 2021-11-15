@@ -39,7 +39,7 @@ export const Program = () => {
         extraActions={extraFormActions}
       />
 
-      <AttendanceTable data={program.attendance} />
+      <AttendanceTable programId={program.id} data={program.attendance} />
     </Paper>
   );
 };

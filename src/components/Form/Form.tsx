@@ -6,6 +6,8 @@ import React from "react";
 import { Form as RFForm, FormSpy } from "react-final-form";
 import DivFlexSpacer from "../DivFlexSpacer";
 import { StyledHeader } from "../Header";
+import { Autocomplete } from "./Autocomplete";
+import { SubmitButton } from "./SubmitButton";
 import { FormBuilderType, FieldType, UnionFieldBuilderType } from "./types";
 
 const mapFieldTypeToComponent = (field: UnionFieldBuilderType) => {
@@ -30,6 +32,10 @@ const mapFieldTypeToComponent = (field: UnionFieldBuilderType) => {
       const { fieldType, ...fieldProps } = field;
       return <Select {...fieldProps} />;
     }
+    case FieldType.AUTOCOMPLETE: {
+      const { fieldType, ...fieldProps } = field;
+      return <Autocomplete {...fieldProps} />;
+    }
     default:
       return null;
   }
@@ -44,7 +50,9 @@ export type FormProps<FormValues> = {
   formSchema: FormBuilderType;
   onSubmit?: (values: FormValues) => void;
   validate?: (values: FormValues) => ValidationErrors | Promise<ValidationErrors>;
+  showActionsInHeader?: boolean;
   extraActions?: ExtraFormActionType[];
+  submitButtonText?: string;
 };
 
 const Form = <FormValues extends object = {}>({
@@ -53,44 +61,48 @@ const Form = <FormValues extends object = {}>({
   validate,
   onSubmit = () => {},
   extraActions,
+  showActionsInHeader = true,
+  submitButtonText,
 }: FormProps<FormValues>) => {
   const { name: formName, instructions, fields } = formSchema;
+
+  const showHeader = formName || showActionsInHeader;
+  const actionButtons = (
+    <>
+      <DivFlexSpacer />
+      <SubmitButton buttonText={submitButtonText} />
+      {extraActions?.map(({ label, ...btnProps }) => (
+        <Button key={label} {...btnProps}>
+          {label}
+        </Button>
+      ))}
+    </>
+  );
 
   return (
     <RFForm<FormValues>
       initialValues={initialValues}
       onSubmit={onSubmit}
       validate={validate}
-      render={({ handleSubmit, submitting, invalid, dirty }) => (
+      render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
-          <StyledHeader
-            sx={{
-              position: "sticky",
-              top: 0,
-              padding: 2,
-              marginBottom: 2,
-              zIndex: 100,
-              backgroundColor: "#f3f3f3",
-            }}
-          >
-            <Typography variant="h6" fontWeight="bold">
-              {formName}
-            </Typography>
-            <DivFlexSpacer />
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={!dirty || submitting || invalid}
-              startIcon={submitting && <CircularProgress size={32} />}
+          {showHeader && (
+            <StyledHeader
+              sx={{
+                position: "sticky",
+                top: 0,
+                padding: 2,
+                marginBottom: 2,
+                zIndex: 100,
+                backgroundColor: "#f3f3f3",
+              }}
             >
-              Save
-            </Button>
-            {extraActions?.map(({ label, ...btnProps }) => (
-              <Button key={label} {...btnProps} disabled={submitting}>
-                {label}
-              </Button>
-            ))}
-          </StyledHeader>
+              <Typography variant="h6" fontWeight="bold">
+                {formName}
+              </Typography>
+              {showActionsInHeader && actionButtons}
+            </StyledHeader>
+          )}
 
           <Box padding={2}>
             {instructions && <Typography variant="body1">{instructions}</Typography>}
@@ -100,6 +112,7 @@ const Form = <FormValues extends object = {}>({
               ))}
             </Stack>
           </Box>
+          {!showActionsInHeader && <Box sx={{ display: "flex", padding: 2 }}>{actionButtons}</Box>}
           <FormSpy subscription={{ values: true }}>
             {(props) => <pre>{JSON.stringify(props.values, null, 2)}</pre>}
           </FormSpy>

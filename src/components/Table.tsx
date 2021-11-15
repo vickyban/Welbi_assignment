@@ -138,7 +138,7 @@ export const Table = <DataType extends {}>({
         <MuiTableHead>
           <MuiTableRow>
             {columns.map((column) => (
-              <MuiTableCell key={column.headerName}>{column.headerName}</MuiTableCell>
+              <MuiTableCell key={column.field}>{column.headerName}</MuiTableCell>
             ))}
           </MuiTableRow>
         </MuiTableHead>

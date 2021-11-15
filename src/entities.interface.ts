@@ -31,7 +31,7 @@ export type LevelOfCare = "INDEPENDENT" | "ASSISTED" | "MEMORY" | "LONGTERM";
 //   LONGTERM = 'LONGTERM',
 // }
 
-export const attendanceStatuses = ["Active", "Undefined", "Canceled", "Declined", "Passive"];
+export const attendanceStatuses = ["Active", "Undefined", "Canceled", "Declined", "Passive"] as const;
 export type AttendanceStatus = typeof attendanceStatuses[number];
 
 export interface IResidentProgramAttendance {

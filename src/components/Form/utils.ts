@@ -1,5 +1,5 @@
 import { setIn } from "final-form";
-import { SelectData } from "mui-rff";
+import { AutocompleteData, SelectData } from "mui-rff";
 import { Ambulation, LevelOfCare, attendanceStatuses } from "../../entities.interface";
 
 /**
@@ -45,4 +45,20 @@ export const levelOfCareSelectOptions: LevelOfCareSelectData[] = [
   { label: "Assisted", value: "ASSISTED" },
   { label: "Memory", value: "MEMORY" },
   { label: "Long-term", value: "LONGTERM" },
+];
+
+type RecurrenceFrequencySelectDate = SelectData;
+export const recurrenceFrequencySelectOptions: RecurrenceFrequencySelectDate[] = [
+  { label: "Daily", value: "DAILY" },
+  { label: "Weekly", value: "WEEKLY" },
+  { label: "Monthly", value: "MONTHLY" },
+  { label: "Yearly", value: "YEARLY" },
+];
+
+type FacilitatorsSelectDate = AutocompleteData;
+export const defaultFacilitatorsSelectDateSelectOptions: FacilitatorsSelectDate[] = [
+  { label: "Director of Rec", value: "Director of Rec" },
+  { label: "Resident", value: "Resident" },
+  { label: "Rec Aide", value: "Rec Aide" },
+  { label: "Yearly", value: "YEARLY" },
 ];

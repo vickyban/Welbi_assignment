@@ -1,6 +1,12 @@
 import { FieldType, FormBuilderType } from "../../components/Form/types";
 import * as yup from "yup";
-import { ambulationSelectOptions, levelOfCareSelectOptions, getFormValuesValidator } from "../../components/Form/utils";
+import {
+  ambulationSelectOptions,
+  levelOfCareSelectOptions,
+  getFormValuesValidator,
+  recurrenceFrequencySelectOptions,
+  defaultFacilitatorsSelectDateSelectOptions,
+} from "../../components/Form/utils";
 import { IProgram, LevelOfCare } from "../../entities.interface";
 
 const validationSchema = yup.object({
@@ -8,6 +14,20 @@ const validationSchema = yup.object({
   location: yup.string().required().label("Location"),
   start: yup.date().required().label("Start Date"),
   end: yup.date().label("End Date"),
+  dimension: yup.string().required().label("Dimension"),
+  allDay: yup.boolean(),
+  isRepeated: yup.boolean(),
+  recurrence: yup.object().when("isRepeated", {
+    is: true,
+    then: yup
+      .object({
+        frequency: yup.string().required().label("Recurrence Frequency"),
+        interval: yup.number().min(0).required().label("Recurrence Interval"),
+        byMonth: yup.number().min(0).label("Recurrence By Month"),
+        byMonthday: yup.number().min(0).label("Recurrence By Month Day"),
+      })
+      .required(),
+  }),
 });
 
 export const validateForm = getFormValuesValidator(validationSchema);
@@ -44,6 +64,12 @@ export const formSchema: FormBuilderType = {
       fieldType: FieldType.DATE,
     },
     {
+      name: `tags`,
+      label: "Tags",
+      fieldType: FieldType.AUTOCOMPLETE,
+      data: [],
+    },
+    {
       name: "dimension",
       label: "Dimension",
       fieldType: FieldType.TEXT,
@@ -59,15 +85,46 @@ export const formSchema: FormBuilderType = {
     {
       name: "facilitators",
       label: "Facilitators",
-      fieldType: FieldType.SELECT,
-      data: ambulationSelectOptions,
-      multiple: true,
+      fieldType: FieldType.AUTOCOMPLETE,
+      data: defaultFacilitatorsSelectDateSelectOptions,
+    },
+    {
+      name: `hobbies`,
+      label: "Hobbies",
+      fieldType: FieldType.AUTOCOMPLETE,
+      data: [],
     },
     {
       name: `isRepeated`,
       label: "",
       fieldType: FieldType.CHECKBOXES,
       data: { label: "Is Repeated", value: false },
+    },
+    {
+      name: `recurrence.frequency`,
+      label: "Recurrence Frequency",
+      fieldType: FieldType.SELECT,
+      data: recurrenceFrequencySelectOptions,
+    },
+    {
+      name: `recurrence.interval`,
+      label: "Recurrence Interval",
+      fieldType: FieldType.TEXT,
+      type: "number",
+    },
+    {
+      name: `recurrence.byMonth`,
+      label: "Recurrence By Month",
+      fieldType: FieldType.TEXT,
+      type: "number",
+      min: "0", // DOESN"T WORK!!!
+    },
+    {
+      name: `recurrence.byMonthday`,
+      label: "Recurrence By Month Day",
+      fieldType: FieldType.TEXT,
+      type: "number",
+      min: "0", // DOESN"T WORK!!!
     },
   ],
 };
@@ -92,6 +149,8 @@ export class ProgramFormInput implements Omit<IProgram, "id" | "attendance" | "s
     this.facilitators = [];
     this.levelOfCare = [];
     this.hobbies = [];
+    this.allDay = false;
+    this.isRepeated = false;
   }
 
   static empty() {
