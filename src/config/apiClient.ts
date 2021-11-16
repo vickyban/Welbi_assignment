@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useCallback, useEffect, useReducer } from "react";
-import { appHost } from "./appConstants";
+import { accessToken, appHost } from "./appConstants";
 
 export const apiClient = axios.create({
   baseURL: appHost,
   headers: {
-    Authorization: "Bearer ce2d8882-92c3-4875-9a3b-c19bc63fc75c",
+    Authorization: `Bearer ${accessToken}`,
   },
 });
 

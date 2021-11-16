@@ -30,7 +30,7 @@ const Programs = () => {
 
       <ProgramTable data={programs} />
       {loading && (
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
           <CircularProgress />
         </Box>
       )}
