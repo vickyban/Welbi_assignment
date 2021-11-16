@@ -1,7 +1,6 @@
 import { FieldType, FormBuilderType } from "../../components/Form/types";
 import * as yup from "yup";
 import {
-  ambulationSelectOptions,
   levelOfCareSelectOptions,
   getFormValuesValidator,
   recurrenceFrequencySelectOptions,

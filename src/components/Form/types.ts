@@ -1,5 +1,6 @@
 import { AutocompleteData, CheckboxData, RadioData, SelectData } from "mui-rff";
 import { FieldProps } from "react-final-form";
+import { SingleSelectAutocompleteProps } from "./SingleSelectAutocomplete";
 
 export enum FieldType {
   TEXT = "TEXT",
@@ -10,6 +11,7 @@ export enum FieldType {
   SELECT = "SELECT",
   SWITCH = "SWITCH",
   AUTOCOMPLETE = "AUTOCOMPLETE",
+  SINGLE_SELECT_AUTOCOMPLETE = "SINGLE_SELECT_AUTOCOMPLETE",
 }
 
 export interface FieldBuilderType {
@@ -53,17 +55,23 @@ export interface AutocompleteFieldBuilderType extends FieldBuilderType {
   data: AutocompleteData[];
 }
 
+export interface SingleSelectAutocompleteFieldBuilderType extends FieldBuilderType, SingleSelectAutocompleteProps {
+  readonly fieldType: FieldType.SINGLE_SELECT_AUTOCOMPLETE;
+  data: AutocompleteData[];
+}
+
 export type UnionFieldBuilderType =
   | TextFieldBuilderType
   | DateFieldBuilderType
   | CheckboxesFieldBuilderType
   | RadiosFieldBuilderType
   | SelectFieldBuilderType
-  | AutocompleteFieldBuilderType;
+  | AutocompleteFieldBuilderType
+  | SingleSelectAutocompleteFieldBuilderType;
 
 export interface FormBuilderType {
   id?: string;
-  name: string;
+  name?: string;
   instructions?: string;
   fields: Array<UnionFieldBuilderType>;
 }

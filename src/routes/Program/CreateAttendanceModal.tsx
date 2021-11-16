@@ -1,13 +1,26 @@
-import { useState, useMemo, ReactNode, ReactElement } from "react";
+import { useState, useMemo, ReactElement } from "react";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import Form from "../../components/Form/Form";
 import { useResidentsContext } from "../../contexts/ResidentsContext";
 import { FieldType, FormBuilderType } from "../../components/Form/types";
-import { attendanceStatusSelectOptions } from "../../components/Form/utils";
+import { attendanceStatusSelectOptions, getFormValuesValidator } from "../../components/Form/utils";
 import { useApi } from "../../config/apiClient";
 import { AttendanceStatus } from "../../entities.interface";
-import { Typography } from "@mui/material";
+import { createFilterOptions } from "@mui/material";
+import { AutocompleteData } from "mui-rff";
+import * as yup from "yup";
+
+const validationSchema = yup.object({
+  residentId: yup.string().required().label("Resident"),
+  status: yup.string().required().label("Status"),
+});
+
+export const validateForm = getFormValuesValidator(validationSchema);
+
+const residentFilterOptions = createFilterOptions({
+  stringify: (option: AutocompleteData) => `${option.firstName} ${option.lastName}`,
+});
 
 class AttendanceFormInput {
   residentId?: string;
@@ -38,10 +51,13 @@ export const CreateAttendanceModal = ({ title = "Add Resident Attendance", progr
       name: "",
       fields: [
         {
-          fieldType: FieldType.SELECT,
+          fieldType: FieldType.SINGLE_SELECT_AUTOCOMPLETE,
           name: "residentId",
           label: "Selected Resident",
-          data: attendanceStatusSelectOptions,
+          data: residents,
+          getOptionLabel: (option) => `${option.firstName} ${option.lastName} (ID:${option.id})`,
+          getOptionValue: (option) => option.id,
+          filterOptions: residentFilterOptions,
         },
         {
           fieldType: FieldType.SELECT,
@@ -82,6 +98,7 @@ export const CreateAttendanceModal = ({ title = "Add Resident Attendance", progr
           onSubmit={onFormSubmit}
           showActionsInHeader={false}
           submitButtonText="Add Attendance"
+          validate={validateForm}
         />
       </Dialog>
       {children(handleOpen)}

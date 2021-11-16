@@ -5,8 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useResidentsContext } from "../../contexts/ResidentsContext";
 import { formSchema, ResidentFormInput, validateForm } from "./utils";
 
-type Props = {};
-export const Resident = (props: Props) => {
+export const Resident = () => {
   const navigate = useNavigate();
   const { residentId } = useParams();
   const { residentDic } = useResidentsContext();

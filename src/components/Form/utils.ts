@@ -15,7 +15,6 @@ export const getFormValuesValidator = (schema: any) => async (values: any) => {
     await schema.validate(values, { abortEarly: false });
   } catch (err: any) {
     const errors = err.inner.reduce((formErrors: any, error: any) => {
-      // setIn is a helper function that set any arbitrarily deep value inside an object using dot-bracket syntax e.g. "some.deep.values[3].whatever"
       return setIn(formErrors, error.path, error.message);
     }, {});
     return errors;

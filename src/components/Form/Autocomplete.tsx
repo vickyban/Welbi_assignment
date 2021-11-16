@@ -5,9 +5,9 @@ import { createFilterOptions } from "@mui/material";
 
 const filter = createFilterOptions<AutocompleteData>();
 
-export type Props = Omit<AutocompleteFieldBuilderType, "fieldType"> & {};
+export type AutocompleteProps = Omit<AutocompleteFieldBuilderType, "fieldType"> & {};
 
-export const Autocomplete: React.FC<Props> = ({ name, label, data, ...autocompleteProps }) => {
+export const Autocomplete: React.FC<AutocompleteProps> = ({ name, label, data, ...autocompleteProps }) => {
   const [options, setOptions] = useState<AutocompleteData[]>(data);
   return (
     <RffAutocomplete

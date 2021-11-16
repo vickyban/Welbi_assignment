@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Stack, Typography, Box, Button, CircularProgress, ButtonProps } from "@mui/material";
+import { Stack, Typography, Box, Button, ButtonProps } from "@mui/material";
 import { ValidationErrors } from "final-form";
 import { Checkboxes, DatePicker, Radios, Select, TextField } from "mui-rff";
 import React from "react";
-import { Form as RFForm, FormSpy } from "react-final-form";
+import { Form as RFForm } from "react-final-form";
 import DivFlexSpacer from "../DivFlexSpacer";
 import { StyledHeader } from "../Header";
 import { Autocomplete } from "./Autocomplete";
+import { SingleSelectAutocomplete } from "./SingleSelectAutocomplete";
 import { SubmitButton } from "./SubmitButton";
 import { FormBuilderType, FieldType, UnionFieldBuilderType } from "./types";
 
@@ -35,6 +36,10 @@ const mapFieldTypeToComponent = (field: UnionFieldBuilderType) => {
     case FieldType.AUTOCOMPLETE: {
       const { fieldType, ...fieldProps } = field;
       return <Autocomplete {...fieldProps} />;
+    }
+    case FieldType.SINGLE_SELECT_AUTOCOMPLETE: {
+      const { fieldType, ...fieldProps } = field;
+      return <SingleSelectAutocomplete {...fieldProps} />;
     }
     default:
       return null;
@@ -113,9 +118,6 @@ const Form = <FormValues extends object = {}>({
             </Stack>
           </Box>
           {!showActionsInHeader && <Box sx={{ display: "flex", padding: 2 }}>{actionButtons}</Box>}
-          <FormSpy subscription={{ values: true }}>
-            {(props) => <pre>{JSON.stringify(props.values, null, 2)}</pre>}
-          </FormSpy>
         </form>
       )}
     />

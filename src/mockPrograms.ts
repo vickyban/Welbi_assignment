@@ -1,4 +1,4 @@
-import { IProgram } from "../entities.interface";
+import { IProgram } from "./entities.interface";
 
 export const mockPrograms: IProgram[] = [
   {

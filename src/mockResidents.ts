@@ -1,4 +1,4 @@
-import { Ambulation, IResident } from "../entities.interface";
+import { Ambulation, IResident } from "./entities.interface";
 
 export const mockResidents: IResident[] = [
   {
