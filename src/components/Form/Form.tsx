@@ -86,6 +86,7 @@ const Form = <FormValues extends object = {}>({
 
   return (
     <RFForm<FormValues>
+      keepDirtyOnReinitialize
       initialValues={initialValues}
       onSubmit={onSubmit}
       validate={validate}

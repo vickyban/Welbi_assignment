@@ -2,6 +2,9 @@ import { IProgram } from "../../entities.interface";
 
 import { ColumnType, Table } from "../../components/Table";
 import { useNavigate } from "react-router-dom";
+import { format, parseISO } from "date-fns";
+
+const DATETIME_FORMAT = "MM/dd/yyyy, p";
 
 const getArrayItem = (item: any, key?: string) => {
   if (item instanceof Object && key) {
@@ -17,10 +20,12 @@ const columns: ColumnType<IProgram>[] = [
   {
     field: "start",
     headerName: "Start Date",
+    getCellValue: (program) => format(parseISO(program.start), DATETIME_FORMAT),
   },
   {
     field: "end",
     headerName: "End Date",
+    getCellValue: (program) => format(parseISO(program.end), DATETIME_FORMAT),
   },
   {
     field: "tags",
